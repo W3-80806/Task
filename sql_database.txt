@@ -1,0 +1,168 @@
+W3_80806_Minal>create database Blog
+    -> ;
+Query OK, 1 row affected (0.01 sec)
+
+W3_80806_Minal>CREATE TABLE users (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100) NOT NULL,
+    ->     email VARCHAR(100) NOT NULL UNIQUE,
+    ->     password VARCHAR(255) NOT NULL
+    -> );
+ERROR 1046 (3D000): No database selected
+W3_80806_Minal>use Blog
+Database changed
+W3_80806_Minal>CREATE TABLE users (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     name VARCHAR(100) NOT NULL,
+    ->     email VARCHAR(100) NOT NULL UNIQUE,
+    ->     password VARCHAR(255) NOT NULL
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+W3_80806_Minal>INSERT INTO users (name, email, password) VALUES
+    -> ('Alice Sharma', 'alice@example.com', 'hashed_password_1'),
+    -> ('Bob Singh', 'bob@example.com', 'hashed_password_2'),
+    -> use Blog^C
+W3_80806_Minal>INSERT INTO users (name, email, password) VALUES('Alice','alice@gmail.com','alice@123'),('Bob', 'bob@gmail.com','Bob@123'),('Charlie','charlie@gmail.com','Charlie@1234');
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+W3_80806_Minal>select * from users;
++----+---------+-------------------+--------------+
+| id | name    | email             | password     |
++----+---------+-------------------+--------------+
+|  1 | Alice   | alice@gmail.com   | alice@123    |
+|  2 | Bob     | bob@gmail.com     | Bob@123      |
+|  3 | Charlie | charlie@gmail.com | Charlie@1234 |
++----+---------+-------------------+--------------+
+3 rows in set (0.00 sec)
+
+W3_80806_Minal>CREATE TABLE posts (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     title VARCHAR(256) NOT NULL,
+    ->     content LONGTEXT NOT NULL,
+    ->     authorId INT,
+    ->     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (authorId) REFERENCES users(id) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+W3_80806_Minal>INSERT INTO posts (title, content, authorId) VALUES('First Blog Post', 'content of first post',1),('Second Blog Post','content of second post',2);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+W3_80806_Minal>select * from posts;
++----+------------------+------------------------+----------+---------------------+---------------------+
+| id | title            | content                | authorId | createdAt           | updatedAt           |
++----+------------------+------------------------+----------+---------------------+---------------------+
+|  1 | First Blog Post  | content of first post  |        1 | 2025-05-29 13:11:34 | 2025-05-29 13:11:34 |
+|  2 | Second Blog Post | content of second post |        2 | 2025-05-29 13:11:34 | 2025-05-29 13:11:34 |
++----+------------------+------------------------+----------+---------------------+---------------------+
+2 rows in set (0.00 sec)
+
+W3_80806_Minal>CREATE TABLE comments (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     postId INT,
+    ->     userId INT,
+    ->     comment TEXT NOT NULL,
+    ->     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ->     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE,
+    ->     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+W3_80806_Minal>INSERT INTO comments (postId, userId, comment) VALUES(1,2,'nice post Alice'),(1,3,'thanks for sharing'),(2,1,'good job Bob');
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+W3_80806_Minal>select * from comments;
++----+--------+--------+--------------------+---------------------+---------------------+
+| id | postId | userId | comment            | createdAt           | updatedAt           |
++----+--------+--------+--------------------+---------------------+---------------------+
+|  1 |      1 |      2 | nice post Alice    | 2025-05-29 13:13:53 | 2025-05-29 13:13:53 |
+|  2 |      1 |      3 | thanks for sharing | 2025-05-29 13:13:53 | 2025-05-29 13:13:53 |
+|  3 |      2 |      1 | good job Bob       | 2025-05-29 13:13:53 | 2025-05-29 13:13:53 |
++----+--------+--------+--------------------+---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+W3_80806_Minal>SELECT * FROM users WHERE email ='alice@gmail.com' AND password ='alice@123' ?
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '?' at line 1
+W3_80806_Minal>SELECT * FROM users WHERE email ='alice@gmail.com' AND password ='alice@123';
++----+-------+-----------------+-----------+
+| id | name  | email           | password  |
++----+-------+-----------------+-----------+
+|  1 | Alice | alice@gmail.com | alice@123 |
++----+-------+-----------------+-----------+
+1 row in set (0.00 sec)
+
+W3_80806_Minal>^C
+W3_80806_Minal>select * from users;
++----+---------+-------------------+--------------+
+| id | name    | email             | password     |
++----+---------+-------------------+--------------+
+|  1 | Alice   | alice@gmail.com   | alice@123    |
+|  2 | Bob     | bob@gmail.com     | Bob@123      |
+|  3 | Charlie | charlie@gmail.com | Charlie@1234 |
+|  4 | minal   | minal@gmail.com   | Minal@123    |
++----+---------+-------------------+--------------+
+4 rows in set (0.00 sec)
+
+W3_80806_Minal>select * from posts;
++----+------------------+------------------------+----------+---------------------+---------------------+
+| id | title            | content                | authorId | createdAt           | updatedAt           |
++----+------------------+------------------------+----------+---------------------+---------------------+
+|  1 | First Blog Post  | content of first post  |        1 | 2025-05-29 13:11:34 | 2025-05-29 13:11:34 |
+|  2 | Second Blog Post | content of second post |        2 | 2025-05-29 13:11:34 | 2025-05-29 13:11:34 |
+|  3 | First Blog Post  | content of first post  |        1 | 2025-05-29 14:21:41 | 2025-05-29 14:21:41 |
++----+------------------+------------------------+----------+---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+W3_80806_Minal>select * from comments;
++----+--------+--------+--------------------+---------------------+---------------------+
+| id | postId | userId | comment            | createdAt           | updatedAt           |
++----+--------+--------+--------------------+---------------------+---------------------+
+|  1 |      1 |      2 | nice post Alice    | 2025-05-29 13:13:53 | 2025-05-29 13:13:53 |
+|  2 |      1 |      3 | thanks for sharing | 2025-05-29 13:13:53 | 2025-05-29 13:13:53 |
+|  3 |      2 |      1 | good job Bob       | 2025-05-29 13:13:53 | 2025-05-29 13:13:53 |
++----+--------+--------+--------------------+---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+W3_80806_Minal>select * from posts where userId =3;
+ERROR 1054 (42S22): Unknown column 'userId' in 'where clause'
+W3_80806_Minal>SELECT * FROM posts ORDER BY createdAt DESC LIMIT 2 OFFSET 1;
++----+-----------------+-----------------------+----------+---------------------+---------------------+
+| id | title           | content               | authorId | createdAt           | updatedAt           |
++----+-----------------+-----------------------+----------+---------------------+---------------------+
+|  3 | First Blog Post | content of first post |        1 | 2025-05-29 14:21:41 | 2025-05-29 14:21:41 |
+|  1 | First Blog Post | content of first post |        1 | 2025-05-29 13:11:34 | 2025-05-29 13:11:34 |
++----+-----------------+-----------------------+----------+---------------------+---------------------+
+2 rows in set (0.00 sec)
+
+
+W3_80806_Minal>CREATE TABLE likes (
+    ->     id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     post_id INT,
+    ->     user_id INT,
+    ->     action ENUM('like', 'dislike'),
+    ->     UNIQUE(post_id, user_id),
+    ->     FOREIGN KEY (post_id) REFERENCES posts(id),
+    ->     FOREIGN KEY (user_id) REFERENCES users(id)
+    -> );
+Query OK, 0 rows affected (0.06 sec)
+W3_80806_Minal>INSERT INTO likes (post_id, user_id, action) VALUES(2,2,'like'),(1,2,'dislike');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+W3_80806_Minal>select * from likes;
++----+---------+---------+---------+
+| id | post_id | user_id | action  |
++----+---------+---------+---------+
+|  3 |       2 |       2 | like    |
+|  4 |       1 |       2 | dislike |
++----+---------+---------+---------+
+2 rows in set (0.00 sec)
+
+
