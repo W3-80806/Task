@@ -1,6 +1,6 @@
 {
     "server": "localhost",
-    "database": "User",
+    "database": "Blog",
     "user": "root",
     "password": "manager",
     "port": 9897
