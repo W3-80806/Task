@@ -85,16 +85,16 @@ app.post("/:id/like", (request, response) => {
         }
 
         var likeExists = checkResult.length > 0;
-
+console.log(likeExists);
         var statement;
         var values;
 
         if (likeExists) {
             statement = `UPDATE likes SET action = '${action}' WHERE post_id = '${post_id}' AND user_id = '${user_id}'`;
-            values = [action, postId, user_id];
+            values = [action, post_id, user_id];
         } else {
             statement = `INSERT INTO likes (post_id, user_id, action) VALUES ('${post_id}','${user_id}','${action}')`;
-            values = [postId, user_id, action];
+            values = [post_Id, user_id, action];
         }
 
         connection.query(statement, values, (error, result) => {
